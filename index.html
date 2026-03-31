@@ -2,77 +2,342 @@
 <html>
   <head>
     <title>Chained Multiplication</title>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
       body {
-        font-family: Arial;
-        padding: 20px;
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+          "Ubuntu", "Cantarell", sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 40px 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .calculator-wrapper {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        padding: 40px;
+        max-width: 700px;
+        width: 100%;
+        animation: slideIn 0.5s ease-out;
+      }
+
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      h2 {
+        color: #2d3748;
+        margin-bottom: 30px;
+        font-size: 28px;
+        text-align: center;
+        font-weight: 600;
+      }
+
+      #container {
+        margin-bottom: 30px;
       }
 
       .row {
-        margin-bottom: 10px;
+        background: #f7fafc;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+        transition: all 0.3s ease;
+        animation: fadeIn 0.4s ease-out;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: scale(0.95);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      @keyframes fadeOut {
+        from {
+          opacity: 1;
+          transform: scale(1);
+        }
+        to {
+          opacity: 0;
+          transform: scale(0.95);
+        }
+      }
+
+      .row:hover {
+        background: #edf2f7;
+        transform: translateX(5px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
       }
 
       input {
-        width: 80px;
-        padding: 5px;
-        margin-right: 10px;
+        width: 100px;
+        padding: 12px 16px;
+        border: 2px solid #e2e8f0;
+        border-radius: 8px;
+        font-size: 15px;
+        transition: all 0.3s ease;
+        background: white;
+        color: #2d3748;
       }
 
-      .result {
-        font-weight: bold;
-        margin: 0 10px;
+      input:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        transform: translateY(-2px);
+      }
+
+      input::placeholder {
+        color: #a0aec0;
+      }
+
+      .result,
+      .final {
+        font-weight: 600;
+        color: #667eea;
+        font-size: 16px;
+        padding: 8px 12px;
+        background: white;
+        border-radius: 6px;
+        min-width: 80px;
+        text-align: center;
+        transition: all 0.3s ease;
+      }
+
+      .final {
+        color: #48bb78;
+        font-size: 18px;
+      }
+
+      .delete-btn {
+        padding: 10px 14px;
+        background: #f56565;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 14px;
+        transition: all 0.3s ease;
+        margin-left: auto;
+      }
+
+      .delete-btn:hover {
+        background: #e53e3e;
+        transform: scale(1.05);
+      }
+
+      .delete-btn:active {
+        transform: scale(0.95);
+      }
+
+      .button-group {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        margin-bottom: 30px;
       }
 
       button {
-        padding: 8px 12px;
-        margin-right: 10px;
+        padding: 14px 28px;
+        border: none;
+        border-radius: 10px;
+        font-size: 16px;
+        font-weight: 600;
         cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
+
+      button:first-child {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+      }
+
+      button:last-child {
+        background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+        color: white;
+      }
+
+      button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      }
+
+      button:active {
+        transform: translateY(-1px);
+      }
+
+      .total-section {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 25px;
+        border-radius: 12px;
+        text-align: center;
+        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+      }
+
+      .total-section h3 {
+        font-size: 20px;
+        font-weight: 600;
+        margin-bottom: 10px;
+      }
+
+      #total {
+        font-size: 36px;
+        font-weight: 700;
+        display: block;
+        margin-top: 10px;
+        animation: pulse 0.5s ease-out;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.1);
+        }
+      }
+
+      @media (max-width: 640px) {
+        .calculator-wrapper {
+          padding: 25px;
+        }
+
+        h2 {
+          font-size: 24px;
+        }
+
+        .row {
+          padding: 15px;
+        }
+
+        input {
+          width: 80px;
+          padding: 10px 12px;
+          font-size: 14px;
+        }
+
+        .button-group {
+          flex-direction: column;
+        }
+
+        button {
+          width: 100%;
+        }
       }
     </style>
   </head>
 
   <body>
-    <h2>Chained Multiplication</h2>
+    <div class="calculator-wrapper">
+      <h2>Chained Multiplication</h2>
 
-    <div id="container">
-      <div class="row">
-        <input type="number" step="0.01" class="num1" placeholder="Num1" />
-        <input type="number" step="0.01" class="num2" placeholder="Num2" />
+      <div id="container">
+        <div class="row">
+          <input type="number" step="0.5" class="num1" placeholder="Num1" />
+          <span>×</span>
+          <input type="number" step="0.5" class="num2" placeholder="Num2" />
+          <span class="result">= 0</span>
+          <span>×</span>
+          <input type="number" step="0.5" class="num3" placeholder="Next" />
+          <span class="final">= 0</span>
+          <button class="delete-btn" onclick="deleteRow(event)">Delete</button>
+        </div>
+      </div>
 
-        <span class="result">= 0</span>
+      <div class="button-group">
+        <button onclick="addRow()">Add More</button>
+        <button onclick="calculateTotal()">Calculate Total</button>
+      </div>
 
-        <input type="number" step="0.01" class="num3" placeholder="Next" />
-
-        <span class="final">= 0</span>
+      <div class="total-section">
+        <h3>Total</h3>
+        <span id="total">0</span>
       </div>
     </div>
 
-    <br />
-
-    <button onclick="addRow()">Add More</button>
-    <button onclick="calculateTotal()">Calculate Total</button>
-
-    <h3>Total: <span id="total">0</span></h3>
-
     <script>
+      // Strict number validation (no letters, no -, only digits + one decimal)
+      document.addEventListener("input", function (e) {
+        if (e.target.tagName !== "INPUT") return;
+
+        let value = e.target.value;
+
+        // Remove anything except digits and dot
+        value = value.replace(/[^0-9.]/g, "");
+
+        // Allow only ONE decimal point
+        const parts = value.split(".");
+        if (parts.length > 2) {
+          value = parts[0] + "." + parts.slice(1).join("");
+        }
+
+        // Prevent starting with dot (".5" → "0.5")
+        if (value.startsWith(".")) {
+          value = "0" + value;
+        }
+
+        e.target.value = value;
+      });
+      function deleteRow(event) {
+        const row = event.target.closest(".row");
+        if (row) {
+          row.style.animation = "fadeOut 0.3s ease-out";
+          setTimeout(() => {
+            row.remove();
+          }, 300);
+        }
+      }
+
       function addRow() {
         const div = document.createElement("div");
         div.className = "row";
 
         div.innerHTML = `
-        <input type="number" step="0.01" class="num1" placeholder="Num1">
-        <input type="number" step="0.01" class="num2" placeholder="Num2">
+        <input type="number" step="0.5" class="num1" placeholder="Num1">
+        <span>×</span>
+        <input type="number" step="0.5" class="num2" placeholder="Num2">
         <span class="result">= 0</span>
-        <input type="number" step="0.01" class="num3" placeholder="Next">
+        <span>×</span>
+        <input type="number" step="0.5" class="num3" placeholder="Next">
         <span class="final">= 0</span>
-    `;
+        <button class="delete-btn" onclick="deleteRow(event)">Delete</button>
+        `;
 
         document.getElementById("container").appendChild(div);
       }
 
-      // Live calculation
-      document.addEventListener("input", function () {
+      function updateCalculations() {
         const rows = document.querySelectorAll(".row");
 
         rows.forEach((row) => {
@@ -89,6 +354,34 @@
           let final = Math.floor(res1 * n3);
           finalSpan.innerText = "= " + final;
         });
+      }
+
+      // Live calculation
+      document.addEventListener("input", updateCalculations);
+
+      // Arrow key navigation
+      document.addEventListener("keydown", function (e) {
+        if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
+
+        const target = e.target;
+        if (target.tagName !== "INPUT" || target.type !== "number") return;
+
+        const row = target.closest(".row");
+        if (!row) return;
+
+        const inputs = row.querySelectorAll("input");
+        const currentIndex = Array.from(inputs).indexOf(target);
+
+        if (currentIndex === -1) return;
+
+        let nextIndex;
+        if (e.key === "ArrowRight") {
+          nextIndex = (currentIndex + 1) % inputs.length;
+        } else {
+          nextIndex = (currentIndex - 1 + inputs.length) % inputs.length;
+        }
+
+        inputs[nextIndex].focus();
       });
 
       // Total sum
@@ -108,6 +401,13 @@
         });
 
         document.getElementById("total").innerText = total;
+
+        // Trigger animation
+        const totalEl = document.getElementById("total");
+        totalEl.style.animation = "none";
+        setTimeout(() => {
+          totalEl.style.animation = "pulse 0.5s ease-out";
+        }, 10);
       }
     </script>
   </body>
