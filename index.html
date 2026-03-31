@@ -310,8 +310,25 @@
     </div>
 
     <script>
-      // Strict number validation (no letters, no -, only digits + one decimal)
+
       document.addEventListener("input", function (e) {
+  if (e.target.tagName !== "INPUT") return;
+
+  let value = e.target.value;
+
+  // Allow digits + optional single decimal
+  if (!/^\d*\.?\d*$/.test(value)) {
+    e.target.value = value.slice(0, -1);
+    return;
+  }
+
+  // Fix ".5" → "0.5"
+  if (value.startsWith(".")) {
+    e.target.value = "0" + value;
+  }
+});
+      // Strict number validation (no letters, no -, only digits + one decimal)
+    /*  document.addEventListener("input", function (e) {
         if (e.target.tagName !== "INPUT") return;
 
         let value = e.target.value;
@@ -341,7 +358,7 @@
           }, 300);
         }
       }
-
+*/
       function addRow() {
         const div = document.createElement("div");
         div.className = "row";
