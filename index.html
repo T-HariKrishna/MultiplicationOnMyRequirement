@@ -228,31 +228,54 @@
         }
       }
 
-      @media (max-width: 640px) {
+      @media (max-width: 440px) {
+        body {
+          padding: 20px 10px;
+        }
+
         .calculator-wrapper {
-          padding: 25px;
+          padding: 20px;
+          border-radius: 15px;
         }
 
         h2 {
-          font-size: 24px;
+          font-size: 22px;
         }
 
         .row {
-          padding: 15px;
+          flex-direction: column;
+          align-items: stretch;
+          gap: 8px;
         }
 
         input {
-          width: 80px;
-          padding: 10px 12px;
-          font-size: 14px;
+          width: 100%;
+          font-size: 16px; /* prevents zoom on mobile */
+        }
+
+        .result,
+        .final {
+          width: 100%;
+          text-align: center;
+        }
+
+        .delete-btn {
+          width: 100%;
+          margin-left: 0;
         }
 
         .button-group {
           flex-direction: column;
+          gap: 10px;
         }
 
         button {
           width: 100%;
+          font-size: 16px;
+        }
+
+        #total {
+          font-size: 28px;
         }
       }
     </style>
