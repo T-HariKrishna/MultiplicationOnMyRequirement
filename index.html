@@ -60,6 +60,7 @@
         border-radius: 12px;
         padding: 16px;
         margin-bottom: 15px;
+
         display: flex;
         align-items: center;
         flex-wrap: wrap;
@@ -138,7 +139,7 @@
 
       .delete-btn {
         padding: 10px 14px;
-        background: #f56565;
+        background: #1ec009;
         color: white;
         border: none;
         border-radius: 8px;
@@ -175,13 +176,21 @@
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
       }
 
-      button:first-child {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      /* Add More */
+      .button-group button:nth-child(1) {
+        background: linear-gradient(135deg, #667eea, #764ba2);
         color: white;
       }
 
-      button:last-child {
-        background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+      /* Calculate Total */
+      .button-group button:nth-child(2) {
+        background: linear-gradient(135deg, #48bb78, #38a169);
+        color: white;
+      }
+
+      /* Clear All */
+      .button-group button:nth-child(3) {
+        background: linear-gradient(135deg, #f56565, #e53e3e);
         color: white;
       }
 
@@ -235,6 +244,7 @@
         .calculator-wrapper {
           padding: 12px 8px;
           border-radius: 15px;
+          /* width: auto; */
         }
 
         h2 {
@@ -266,10 +276,16 @@
 
         .result,
         .final {
-          font-size: 17px;
+          /* font-size: 17px;
           min-width: 80px;
           padding: 6px 4px;
+          white-space: nowrap; */
+          flex: 0 1 auto; /* allow grow but controlled */
+          min-width: 80px;
+          max-width: 140px;
+          font-size: 17px;
           white-space: nowrap;
+          overflow-x: auto;
         }
 
         .spacer {
@@ -309,14 +325,14 @@
             step="0.5"
             min="1"
             class="num1"
-            placeholder="Num1"
+            placeholder="Size"
           />
           <span class="mul1">×</span>
-          <input type="number" step="0.5" class="num2" placeholder="Num2" />
+          <input type="number" step="0.5" class="num2" placeholder="Size" />
           <span class="result">= 0</span>
           <span class="spacer"></span>
           <span class="mul2">×</span>
-          <input type="number" step="0.5" class="num3" placeholder="Next" />
+          <input type="number" step="0.5" class="num3" placeholder="No.of" />
           <span class="final">= 0</span>
           <button class="delete-btn" onclick="deleteRow(event)">✕</button>
         </div>
@@ -325,6 +341,7 @@
       <div class="button-group">
         <button onclick="addRow()">Add More</button>
         <button onclick="calculateTotal()">Calculate Total</button>
+        <button onclick="deleteAllRows()">Delete All</button>
       </div>
 
       <div class="total-section">
@@ -390,7 +407,7 @@
           const n3 = parseFloat(row.querySelector(".num3").value) || 0;
 
           const res1 = Math.floor(n1 * n2);
-          const final = Math.floor(res1 * n3);
+          const final = Math.floor(n1 * n2 * n3);
 
           row.querySelector(".result").innerText = "= " + res1;
           row.querySelector(".final").innerText = "= " + final;
@@ -402,6 +419,7 @@
       /* ── Arrow-key navigation ── */
       document.addEventListener("keydown", function (e) {
         if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
+
         const target = e.target;
         if (target.tagName !== "INPUT") return;
 
@@ -412,12 +430,46 @@
         const idx = inputs.indexOf(target);
         if (idx === -1) return;
 
-        const next =
-          e.key === "ArrowRight"
-            ? (idx + 1) % inputs.length
-            : (idx - 1 + inputs.length) % inputs.length;
+        // 👉 RIGHT ARROW
+        if (e.key === "ArrowRight") {
+          if (idx === inputs.length - 1) {
+            const container = document.getElementById("container");
 
-        inputs[next].focus();
+            // ✅ Check if this row is the LAST row
+            const isLastRow = row === container.lastElementChild;
+
+            if (isLastRow) {
+              // ➕ Add new row
+              addRow();
+
+              const allRows = document.querySelectorAll(".row");
+              const lastRow = allRows[allRows.length - 1];
+              lastRow.querySelector("input").focus();
+            } else {
+              // 👉 Move to next row first input
+              const nextRow = row.nextElementSibling;
+              if (nextRow) {
+                nextRow.querySelector("input").focus();
+              }
+            }
+          } else {
+            inputs[idx + 1].focus();
+          }
+        }
+
+        // 👉 LEFT ARROW
+        if (e.key === "ArrowLeft") {
+          if (idx === 0) {
+            // Optional: go to previous row last input
+            const prevRow = row.previousElementSibling;
+            if (prevRow) {
+              const prevInputs = prevRow.querySelectorAll("input");
+              prevInputs[prevInputs.length - 1].focus();
+            }
+          } else {
+            inputs[idx - 1].focus();
+          }
+        }
       });
 
       /* ── Calculate total ── */
@@ -434,6 +486,30 @@
 
         const totalEl = document.getElementById("total");
         totalEl.innerText = total;
+        totalEl.style.animation = "none";
+        setTimeout(() => {
+          totalEl.style.animation = "pulse 0.5s ease-out";
+        }, 10);
+      }
+
+      /*remove all rows*/
+      function deleteAllRows() {
+        const container = document.getElementById("container");
+
+        // Remove all rows
+        container.innerHTML = "";
+
+        //  add one fresh empty row
+        const div = document.createElement("div");
+        div.className = "row";
+        div.innerHTML = rowHTML();
+        container.appendChild(div);
+
+        // Reset total
+        const totalEl = document.getElementById("total");
+        totalEl.innerText = "0";
+
+        // Animation reset
         totalEl.style.animation = "none";
         setTimeout(() => {
           totalEl.style.animation = "pulse 0.5s ease-out";
