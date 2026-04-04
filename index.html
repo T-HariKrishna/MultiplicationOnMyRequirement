@@ -188,12 +188,6 @@
         color: white;
       }
 
-      /* Clear All */
-      .button-group button:nth-child(3) {
-        background: linear-gradient(135deg, #f56565, #e53e3e);
-        color: white;
-      }
-
       button:hover {
         transform: translateY(-3px);
         box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
@@ -223,6 +217,10 @@
         display: block;
         margin-top: 10px;
         animation: pulse 0.5s ease-out;
+      }
+      .delete-all-btn {
+        background: linear-gradient(135deg, #f56565, #e53e3e);
+        color: white;
       }
 
       @keyframes pulse {
@@ -341,12 +339,16 @@
       <div class="button-group">
         <button onclick="addRow()">Add More</button>
         <button onclick="calculateTotal()">Calculate Total</button>
-        <button onclick="deleteAllRows()">Delete All</button>
       </div>
 
       <div class="total-section">
         <h3>Total</h3>
         <span id="total">0</span>
+      </div>
+      <div style="text-align: center; margin-top: 20px">
+        <button class="delete-all-btn" onclick="deleteAllRows()">
+          Delete All
+        </button>
       </div>
     </div>
 
