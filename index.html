@@ -158,14 +158,14 @@
         transform: scale(0.95);
       }
 
-      .button-group {
+      .button-group,#calc {
         display: flex;
         gap: 15px;
         justify-content: center;
         margin-bottom: 30px;
       }
 
-      button {
+      button,#calc {
         padding: 14px 28px;
         border: none;
         border-radius: 10px;
@@ -177,7 +177,7 @@
       }
 
       /* Add More */
-      .button-group button:nth-child(1) {
+      .button-group button:nth-child(1),#calc {
         background: linear-gradient(135deg, #667eea, #764ba2);
         color: white;
       }
@@ -187,7 +187,15 @@
         background: linear-gradient(135deg, #48bb78, #38a169);
         color: white;
       }
-
+      #calc{
+        margin-top: 20px;
+        padding-bottom: 20px;
+      }
+      #calc a{
+        margin-top: 5px;
+        text-decoration:none ;
+        color: white;
+      }
       button:hover {
         transform: translateY(-3px);
         box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
@@ -350,6 +358,7 @@
           Delete All
         </button>
       </div>
+      <div id="calc"><a href="calculator.html">Go To Calculator</a></div>
     </div>
 
     <script>
